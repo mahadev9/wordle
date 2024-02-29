@@ -6,8 +6,8 @@ const THIRD_LINE_CHARACTERS = ['Z', 'X', 'C', 'V', 'B', 'N', 'M'];
 
 const NOT_USED_COLOR = 'bg-gray-200';
 const USED_COLOR = 'bg-gray-500';
-const IN_PLACE_COLOR = 'bg-yellow-200';
-const EXISTS_COLOR = 'bg-lime-300';
+const IN_PLACE_COLOR = 'bg-lime-300';
+const EXISTS_COLOR = 'bg-yellow-200';
 
 export default function Keyboard(props: any) {
   return (

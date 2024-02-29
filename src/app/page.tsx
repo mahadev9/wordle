@@ -11,7 +11,7 @@ export default function Home() {
     <div className="h-screen bg-white">
       <Header />
       <Wordle
-        wordle={wordle}
+        wordle={'JOKER'}
       />
     </div>
   );
