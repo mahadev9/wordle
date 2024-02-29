@@ -4,6 +4,7 @@ import { useState } from "react";
 import Keyboard from "./keyboard";
 import ShowWords from "./showWords";
 import { words } from "../lib/words";
+import { clearMethod } from "../lib/utility";
 
 export default function Wordle(props: any) {
 
@@ -165,70 +166,22 @@ export default function Wordle(props: any) {
 
   const clickClear = () => {
     if (currentLine == 1) {
-      let tempFirstWord = [...firstWord];
-      let found = false;
-      for (let i = firstWord.length - 1; i >= 0; i--) {
-        if (!found && tempFirstWord[i] != '') {
-          tempFirstWord[i] = '';
-          found = true;
-        }
-      }
-      setFirstWord(tempFirstWord);
+      clearMethod(firstWord, setFirstWord);
     }
     if (currentLine == 2) {
-      let tempSecondWord = [...secondWord];
-      let found = false;
-      for (let i = secondWord.length - 1; i >= 0; i--) {
-        if (!found && tempSecondWord[i] != '') {
-          tempSecondWord[i] = '';
-          found = true;
-        }
-      }
-      setSecondWord(tempSecondWord);
+      clearMethod(secondWord, setSecondWord);
     }
     if (currentLine == 3) {
-      let tempThirdWord = [...thirdWord];
-      let found = false;
-      for (let i = thirdWord.length - 1; i >= 0; i--) {
-        if (!found && tempThirdWord[i] != '') {
-          tempThirdWord[i] = '';
-          found = true;
-        }
-      }
-      setThirdWord(tempThirdWord);
+      clearMethod(thirdWord, setThirdWord);
     }
     if (currentLine == 4) {
-      let tempForthWord = [...forthWord];
-      let found = false;
-      for (let i = forthWord.length - 1; i >= 0; i--) {
-        if (!found && tempForthWord[i] != '') {
-          tempForthWord[i] = '';
-          found = true;
-        }
-      }
-      setForthWord(tempForthWord);
+      clearMethod(forthWord, setForthWord);
     }
     if (currentLine == 5) {
-      let tempFifthWord = [...fifthWord];
-      let found = false;
-      for (let i = fifthWord.length - 1; i >= 0; i--) {
-        if (!found && tempFifthWord[i] != '') {
-          tempFifthWord[i] = '';
-          found = true;
-        }
-      }
-      setFifthWord(tempFifthWord);
+      clearMethod(fifthWord, setFifthWord);
     }
     if (currentLine == 6) {
-      let tempSixthWord = [...sixthWord];
-      let found = false;
-      for (let i = sixthWord.length - 1; i >= 0; i--) {
-        if (!found && tempSixthWord[i] != '') {
-          tempSixthWord[i] = '';
-          found = true;
-        }
-      }
-      setSixthWord(tempSixthWord);
+      clearMethod(sixthWord, setSixthWord);
     }
   }
 
