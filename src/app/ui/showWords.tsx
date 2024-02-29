@@ -31,7 +31,7 @@ export default function ShowWords(props: any) {
           <LetterBox
             letter={character}
             key={index}
-            className={props.currentLine != 4 && (props.wordle.includes(character) ? (props.wordle.indexOf(character) == index ? EXISTS_COLOR : IN_PLACE_COLOR) : USED_COLOR)}
+            className={props.currentLine != 3 && (props.wordle.includes(character) ? (props.wordle.indexOf(character) == index ? EXISTS_COLOR : IN_PLACE_COLOR) : USED_COLOR)}
           />
         ))}
       </div>
@@ -40,7 +40,7 @@ export default function ShowWords(props: any) {
           <LetterBox
             letter={character}
             key={index}
-            className={props.currentLine != 5 && (props.wordle.includes(character) ? (props.wordle.indexOf(character) == index ? EXISTS_COLOR : IN_PLACE_COLOR) : USED_COLOR)}
+            className={props.currentLine != 4 && (props.wordle.includes(character) ? (props.wordle.indexOf(character) == index ? EXISTS_COLOR : IN_PLACE_COLOR) : USED_COLOR)}
           />
         ))}
       </div>
@@ -49,7 +49,7 @@ export default function ShowWords(props: any) {
           <LetterBox
             letter={character}
             key={index}
-            className={props.currentLine != 6 && (props.wordle.includes(character) ? (props.wordle.indexOf(character) == index ? EXISTS_COLOR : IN_PLACE_COLOR) : USED_COLOR)}
+            className={props.currentLine != 5 && (props.wordle.includes(character) ? (props.wordle.indexOf(character) == index ? EXISTS_COLOR : IN_PLACE_COLOR) : USED_COLOR)}
           />
         ))}
       </div>
@@ -58,7 +58,7 @@ export default function ShowWords(props: any) {
           <LetterBox
             letter={character}
             key={index}
-            className={props.currentLine != 3 && (props.wordle.includes(character) ? (props.wordle.indexOf(character) == index ? EXISTS_COLOR : IN_PLACE_COLOR) : USED_COLOR)}
+            className={props.currentLine != 6 && (props.wordle.includes(character) ? (props.wordle.indexOf(character) == index ? EXISTS_COLOR : IN_PLACE_COLOR) : USED_COLOR)}
           />
         ))}
       </div>

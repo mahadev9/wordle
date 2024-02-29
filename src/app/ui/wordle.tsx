@@ -236,7 +236,7 @@ export default function Wordle(props: any) {
   return (
     <div>
       <ShowWords
-        wordle={props.wordle}
+        wordle={props.wordle.split('')}
         currentLine={currentLine}
         firstWord={firstWord}
         secondWord={secondWord}
