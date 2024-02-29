@@ -49,13 +49,13 @@ export default function Wordle(props: any) {
         return;
       }
       if (words.includes(sixthWord.join('').toLowerCase())) {
-        const tempInPlace = [...sixthWord.filter((letter, index) => props.wordle[index] == letter), ...inPlace];
+        const tempInPlace = sixthWord.filter((letter, index) => props.wordle[index] == letter);
         setInPlace(tempInPlace);
 
-        const tempExists = [...sixthWord.filter((letter) => props.wordle.includes(letter) && !inPlace.includes(letter)), ...exists];
+        const tempExists = sixthWord.filter((letter) => props.wordle.includes(letter) && !inPlace.includes(letter));
         setExists(tempExists);
 
-        const tempNotExists = [...sixthWord.filter((letter) => !props.wordle.includes(letter)), ...notExists];
+        const tempNotExists = sixthWord.filter((letter) => !props.wordle.includes(letter));
         setNotExists(tempNotExists);
 
         setCurrentLine(7);
@@ -68,13 +68,13 @@ export default function Wordle(props: any) {
         return;
       }
       if (words.includes(fifthWord.join('').toLowerCase())) {
-        const tempInPlace = [...fifthWord.filter((letter, index) => props.wordle[index] == letter), ...inPlace];
+        const tempInPlace = fifthWord.filter((letter, index) => props.wordle[index] == letter);
         setInPlace(tempInPlace);
 
-        const tempExists = [...fifthWord.filter((letter) => props.wordle.includes(letter) && !inPlace.includes(letter)), ...exists];
+        const tempExists = fifthWord.filter((letter) => props.wordle.includes(letter) && !inPlace.includes(letter));
         setExists(tempExists);
 
-        const tempNotExists = [...fifthWord.filter((letter) => !props.wordle.includes(letter)), ...notExists];
+        const tempNotExists = fifthWord.filter((letter) => !props.wordle.includes(letter));
         setNotExists(tempNotExists);
 
         setCurrentLine(6);
@@ -88,13 +88,13 @@ export default function Wordle(props: any) {
         return;
       }
       if (words.includes(forthWord.join('').toLowerCase())) {
-        const tempInPlace = [...forthWord.filter((letter, index) => props.wordle[index] == letter), ...inPlace];
+        const tempInPlace = forthWord.filter((letter, index) => props.wordle[index] == letter);
         setInPlace(tempInPlace);
 
-        const tempExists = [...forthWord.filter((letter) => props.wordle.includes(letter) && !inPlace.includes(letter)), ...exists];
+        const tempExists = forthWord.filter((letter) => props.wordle.includes(letter) && !inPlace.includes(letter));
         setExists(tempExists);
 
-        const tempNotExists = [...forthWord.filter((letter) => !props.wordle.includes(letter)), ...notExists];
+        const tempNotExists = forthWord.filter((letter) => !props.wordle.includes(letter));
         setNotExists(tempNotExists);
 
         setCurrentLine(5);
@@ -108,13 +108,13 @@ export default function Wordle(props: any) {
         return;
       }
       if (words.includes(thirdWord.join('').toLowerCase())) {
-        const tempInPlace = [...thirdWord.filter((letter, index) => props.wordle[index] == letter), ...inPlace];
+        const tempInPlace = thirdWord.filter((letter, index) => props.wordle[index] == letter);
         setInPlace(tempInPlace);
 
-        const tempExists = [...thirdWord.filter((letter) => props.wordle.includes(letter) && !inPlace.includes(letter)), ...exists];
+        const tempExists = thirdWord.filter((letter) => props.wordle.includes(letter) && !inPlace.includes(letter));
         setExists(tempExists);
 
-        const tempNotExists = [...thirdWord.filter((letter) => !props.wordle.includes(letter)), ...notExists];
+        const tempNotExists = thirdWord.filter((letter) => !props.wordle.includes(letter));
         setNotExists(tempNotExists);
 
         setCurrentLine(4);
@@ -128,13 +128,13 @@ export default function Wordle(props: any) {
         return;
       }
       if (words.includes(secondWord.join('').toLowerCase())) {
-        const tempInPlace = [...secondWord.filter((letter, index) => props.wordle[index] == letter), ...inPlace];
+        const tempInPlace = secondWord.filter((letter, index) => props.wordle[index] == letter);
         setInPlace(tempInPlace);
 
-        const tempExists = [...secondWord.filter((letter) => props.wordle.includes(letter) && !inPlace.includes(letter)), ...exists];
+        const tempExists = secondWord.filter((letter) => props.wordle.includes(letter) && !inPlace.includes(letter));
         setExists(tempExists);
 
-        const tempNotExists = [...secondWord.filter((letter) => !props.wordle.includes(letter)), ...notExists];
+        const tempNotExists = secondWord.filter((letter) => !props.wordle.includes(letter));
         setNotExists(tempNotExists);
 
         setCurrentLine(3);
@@ -148,13 +148,13 @@ export default function Wordle(props: any) {
         return;
       }
       if (words.includes(firstWord.join('').toLowerCase())) {
-        const tempInPlace = [...firstWord.filter((letter, index) => props.wordle[index] == letter), ...inPlace];
+        const tempInPlace = firstWord.filter((letter, index) => props.wordle[index] == letter);
         setInPlace(tempInPlace);
 
-        const tempExists = [...firstWord.filter((letter) => props.wordle.includes(letter) && !inPlace.includes(letter)), ...exists];
+        const tempExists = firstWord.filter((letter) => props.wordle.includes(letter));
         setExists(tempExists);
 
-        const tempNotExists = [...firstWord.filter((letter) => !props.wordle.includes(letter)), ...notExists];
+        const tempNotExists = firstWord.filter((letter) => !props.wordle.includes(letter));
         setNotExists(tempNotExists);
 
         setCurrentLine(2);

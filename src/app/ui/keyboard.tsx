@@ -18,7 +18,7 @@ export default function Keyboard(props: any) {
             letter={character}
             key={index}
             clickKeys={props.clickKeys}
-            className={props.inPlace.includes(character) ? (props.exists.includes(character) ? EXISTS_COLOR : IN_PLACE_COLOR) : (props.notExists.includes(character) ? USED_COLOR : NOT_USED_COLOR)}
+            className={props.exists.includes(character) ? (props.inPlace.includes(character) ? IN_PLACE_COLOR : EXISTS_COLOR) : (props.notExists.includes(character) ? USED_COLOR : NOT_USED_COLOR)}
           />
         ))}
       </div>
@@ -28,7 +28,7 @@ export default function Keyboard(props: any) {
             letter={character}
             key={index}
             clickKeys={props.clickKeys}
-            className={props.inPlace.includes(character) ? (props.exists.includes(character) ? EXISTS_COLOR : IN_PLACE_COLOR) : (props.notExists.includes(character) ? USED_COLOR : NOT_USED_COLOR)}
+            className={props.exists.includes(character) ? (props.inPlace.includes(character) ? IN_PLACE_COLOR : EXISTS_COLOR) : (props.notExists.includes(character) ? USED_COLOR : NOT_USED_COLOR)}
           />
         ))}
       </div>
@@ -43,7 +43,7 @@ export default function Keyboard(props: any) {
             letter={character}
             key={index}
             clickKeys={props.clickKeys}
-            className={props.inPlace.includes(character) ? (props.exists.includes(character) ? EXISTS_COLOR : IN_PLACE_COLOR) : (props.notExists.includes(character) ? USED_COLOR : NOT_USED_COLOR)}
+            className={props.exists.includes(character) ? (props.inPlace.includes(character) ? IN_PLACE_COLOR : EXISTS_COLOR) : (props.notExists.includes(character) ? USED_COLOR : NOT_USED_COLOR)}
           />
         ))}
         <button
