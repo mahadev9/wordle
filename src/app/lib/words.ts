@@ -2264,7 +2264,7 @@ export const words = [
   "skees",
   "paler",
   "knish",
-  "nigga",
+  // "nigga",
   "madar",
   "wakfs",
   "ruche",

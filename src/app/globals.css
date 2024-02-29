@@ -31,3 +31,7 @@ body {
     text-wrap: balance;
   }
 }
+
+.enter, .clear {
+  font-size: 10px;
+}
