@@ -4,7 +4,52 @@ import { useState } from "react";
 import Keyboard from "./keyboard";
 import ShowWords from "./showWords";
 import { words } from "../lib/words";
-import { clearMethod } from "../lib/utility";
+
+function clearMethod(word: string[], setMethod: (arg0: any[]) => void) {
+  let tempFirstWord = [...word];
+  let found = false;
+  for (let i = word.length - 1; i >= 0; i--) {
+    if (!found && tempFirstWord[i] != '') {
+      tempFirstWord[i] = '';
+      found = true;
+    }
+  }
+  setMethod(tempFirstWord);
+}
+
+function enterMethod(
+  thWord: string[],
+  inPlace: string[],
+  exists: string[],
+  notExists: string[],
+  currentLine: number,
+  setInPlace: (arg0: any[]) => void,
+  setExists: (arg0: any[]) => void,
+  setNotExists: (arg0: any[]) => void,
+  setCurrentLine: (arg0: number) => void, props: any
+) {
+  if (thWord.join('') == props.wordle) {
+    alert('You win!');
+    return;
+  }
+  if (words.includes(thWord.join('').toLowerCase())) {
+    const tempInPlace = [...thWord.filter((letter, index) => props.wordle[index] == letter), ...inPlace];
+    setInPlace(tempInPlace);
+
+    const tempExists = [...thWord.filter((letter) => props.wordle.includes(letter) && !inPlace.includes(letter)), ...exists];
+    setExists(tempExists);
+
+    const tempNotExists = [...thWord.filter((letter) => !props.wordle.includes(letter)), ...notExists];
+    setNotExists(tempNotExists);
+
+    setCurrentLine(currentLine + 1);
+  } else {
+    alert('This word is not in the dictionary!');
+  }
+  if (currentLine == 6) {
+    alert('You lose!');
+  }
+}
 
 export default function Wordle(props: any) {
 
@@ -44,123 +89,22 @@ export default function Wordle(props: any) {
 
   const clickEnter = () => {
     if (currentLine == 6 && sixthWord.length == 5 && sixthWord.every((letter) => letter != '')) {
-      if (sixthWord.join('') == props.wordle) {
-        alert('You win!');
-        return;
-      }
-      if (words.includes(sixthWord.join('').toLowerCase())) {
-        const tempInPlace = [...sixthWord.filter((letter, index) => props.wordle[index] == letter), ...inPlace];
-        setInPlace(tempInPlace);
-
-        const tempExists = [...sixthWord.filter((letter) => props.wordle.includes(letter) && !inPlace.includes(letter)), ...exists];
-        setExists(tempExists);
-
-        const tempNotExists = [...sixthWord.filter((letter) => !props.wordle.includes(letter)), ...notExists];
-        setNotExists(tempNotExists);
-
-        setCurrentLine(7);
-      }
-      alert('You lost!');
+      enterMethod(sixthWord, inPlace, exists, notExists, currentLine, setInPlace, setExists, setNotExists, setCurrentLine, props);
     }
     if (currentLine == 5 && fifthWord.length == 5 && fifthWord.every((letter) => letter != '')) {
-      if (fifthWord.join('') == props.wordle) {
-        alert('You win!');
-        return;
-      }
-      if (words.includes(fifthWord.join('').toLowerCase())) {
-        const tempInPlace = [...fifthWord.filter((letter, index) => props.wordle[index] == letter), ...inPlace];
-        setInPlace(tempInPlace);
-
-        const tempExists = [...fifthWord.filter((letter) => props.wordle.includes(letter) && !inPlace.includes(letter)), ...exists];
-        setExists(tempExists);
-
-        const tempNotExists = [...fifthWord.filter((letter) => !props.wordle.includes(letter)), ...notExists];
-        setNotExists(tempNotExists);
-
-        setCurrentLine(6);
-      } else {
-        alert('This word is not in the dictionary!');
-      }
+      enterMethod(fifthWord, inPlace, exists, notExists, currentLine, setInPlace, setExists, setNotExists, setCurrentLine, props);
     }
     if (currentLine == 4 && forthWord.length == 5 && forthWord.every((letter) => letter != '')) {
-      if (forthWord.join('') == props.wordle) {
-        alert('You win!');
-        return;
-      }
-      if (words.includes(forthWord.join('').toLowerCase())) {
-        const tempInPlace = [...forthWord.filter((letter, index) => props.wordle[index] == letter), ...inPlace];
-        setInPlace(tempInPlace);
-
-        const tempExists = [...forthWord.filter((letter) => props.wordle.includes(letter) && !inPlace.includes(letter)), ...exists];
-        setExists(tempExists);
-
-        const tempNotExists = [...forthWord.filter((letter) => !props.wordle.includes(letter)), ...notExists];
-        setNotExists(tempNotExists);
-
-        setCurrentLine(5);
-      } else {
-        alert('This word is not in the dictionary!');
-      }
+      enterMethod(forthWord, inPlace, exists, notExists, currentLine, setInPlace, setExists, setNotExists, setCurrentLine, props);
     }
     if (currentLine == 3 && thirdWord.length == 5 && thirdWord.every((letter) => letter != '')) {
-      if (thirdWord.join('') == props.wordle) {
-        alert('You win!');
-        return;
-      }
-      if (words.includes(thirdWord.join('').toLowerCase())) {
-        const tempInPlace = [...thirdWord.filter((letter, index) => props.wordle[index] == letter), ...inPlace];
-        setInPlace(tempInPlace);
-
-        const tempExists = [...thirdWord.filter((letter) => props.wordle.includes(letter) && !inPlace.includes(letter)), ...exists];
-        setExists(tempExists);
-
-        const tempNotExists = [...thirdWord.filter((letter) => !props.wordle.includes(letter)), ...notExists];
-        setNotExists(tempNotExists);
-
-        setCurrentLine(4);
-      } else {
-        alert('This word is not in the dictionary!');
-      }
+      enterMethod(thirdWord, inPlace, exists, notExists, currentLine, setInPlace, setExists, setNotExists, setCurrentLine, props);
     }
     if (currentLine == 2 && secondWord.length == 5 && secondWord.every((letter) => letter != '')) {
-      if (secondWord.join('') == props.wordle) {
-        alert('You win!');
-        return;
-      }
-      if (words.includes(secondWord.join('').toLowerCase())) {
-        const tempInPlace = [...secondWord.filter((letter, index) => props.wordle[index] == letter), ...inPlace];
-        setInPlace(tempInPlace);
-
-        const tempExists = [...secondWord.filter((letter) => props.wordle.includes(letter) && !inPlace.includes(letter)), ...exists];
-        setExists(tempExists);
-
-        const tempNotExists = [...secondWord.filter((letter) => !props.wordle.includes(letter)), ...notExists];
-        setNotExists(tempNotExists);
-
-        setCurrentLine(3);
-      } else {
-        alert('This word is not in the dictionary!');
-      }
+      enterMethod(secondWord, inPlace, exists, notExists, currentLine, setInPlace, setExists, setNotExists, setCurrentLine, props);
     }
     if (currentLine == 1 && firstWord.length == 5 && firstWord.every((letter) => letter != '')) {
-      if (firstWord.join('') == props.wordle) {
-        alert('You win!');
-        return;
-      }
-      if (words.includes(firstWord.join('').toLowerCase())) {
-        const tempInPlace = [...firstWord.filter((letter, index) => props.wordle[index] == letter), ...inPlace];
-        setInPlace(tempInPlace);
-
-        const tempExists = [...firstWord.filter((letter) => props.wordle.includes(letter)), ...exists];
-        setExists(tempExists);
-
-        const tempNotExists = [...firstWord.filter((letter) => !props.wordle.includes(letter)), ...notExists];
-        setNotExists(tempNotExists);
-
-        setCurrentLine(2);
-      } else {
-        alert('This word is not in the dictionary!');
-      }
+      enterMethod(firstWord, inPlace, exists, notExists, currentLine, setInPlace, setExists, setNotExists, setCurrentLine, props);
     }
   }
 
