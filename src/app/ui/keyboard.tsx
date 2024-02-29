@@ -34,7 +34,7 @@ export default function Keyboard(props: any) {
       </div>
       <div className="third-line grid grid-rows-1 grid-flow-col gap-1 justify-center items-center">
         <button
-          className={`enter text-black border border-gray-700 rounded font-medium md:text-lg flex items-center justify-center w-10 h-10 md:w-20 md:h-16 subpixel-antialiased ${NOT_USED_COLOR}`}
+          className={`enter text-black border border-gray-700 rounded font-medium md:text-lg flex items-center justify-center w-12 h-12 md:w-20 md:h-16 subpixel-antialiased ${NOT_USED_COLOR}`}
           onClick={() => { props.clickEnter() }}>
           <span>ENTER</span>
         </button>
@@ -47,7 +47,7 @@ export default function Keyboard(props: any) {
           />
         ))}
         <button
-          className={`clear text-black border border-gray-700 rounded font-medium md:text-lg flex items-center justify-center w-10 h-10 md:w-20 md:h-16 subpixel-antialiased ${NOT_USED_COLOR}`}
+          className={`clear text-black border border-gray-700 rounded font-medium md:text-lg flex items-center justify-center w-12 h-12 md:w-20 md:h-16 subpixel-antialiased ${NOT_USED_COLOR}`}
           onClick={() => { props.clickClear() }}>
           <span>CLEAR</span>
         </button>

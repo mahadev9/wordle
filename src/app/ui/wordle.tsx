@@ -42,7 +42,6 @@ export default function Wordle(props: any) {
   }
 
   const clickEnter = () => {
-    console.log(currentLine, inPlace, exists, notExists);
     if (currentLine == 6 && sixthWord.length == 5 && sixthWord.every((letter) => letter != '')) {
       if (sixthWord.join('') == props.wordle) {
         alert('You win!');
@@ -245,7 +244,7 @@ export default function Wordle(props: any) {
         fifthWord={fifthWord}
         sixthWord={sixthWord}
       />
-      <div className="my-4" />
+      <div className="my-16" />
       <Keyboard
         inPlace={inPlace}
         exists={exists}
