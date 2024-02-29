@@ -6,8 +6,8 @@ const IN_PLACE_COLOR = 'bg-yellow-200';
 const EXISTS_COLOR = 'bg-lime-300';
 
 function LetterBoxShow(
-  word: string[], 
-  currentLine: number, 
+  word: string[],
+  currentLine: number,
   line: number,
   wordle: string[]
 ) {

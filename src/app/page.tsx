@@ -9,9 +9,7 @@ export default function Home() {
   return (
     <div className="h-screen bg-white">
       <Header />
-      <Wordle
-        wordle={wordle}
-      />
+      <Wordle wordle={wordle}/>
     </div>
   );
 }
