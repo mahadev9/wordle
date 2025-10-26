@@ -1,60 +1,21 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Keyboard from "./keyboard";
 import ShowWords from "./showWords";
+import Toast from "./toast";
+import GameOverModal from "./gameOverModal";
 import { words } from "../lib/words";
 
-function clearMethod(word: string[], setMethod: (arg0: any[]) => void) {
-  let tempFirstWord = [...word];
-  let found = false;
-  for (let i = word.length - 1; i >= 0; i--) {
-    if (!found && tempFirstWord[i] != '') {
-      tempFirstWord[i] = '';
-      found = true;
-    }
-  }
-  setMethod(tempFirstWord);
+interface WordleProps {
+  wordle: string;
+  onPlayAgain: () => void;
 }
 
-function enterMethod(
-  thWord: string[],
-  inPlace: string[],
-  exists: string[],
-  notExists: string[],
-  currentLine: number,
-  setInPlace: (arg0: any[]) => void,
-  setExists: (arg0: any[]) => void,
-  setNotExists: (arg0: any[]) => void,
-  setCurrentLine: (arg0: number) => void, props: any
-) {
-  if (thWord.join('') == props.wordle) {
-    alert('You win!');
-    return;
-  }
-  if (words.includes(thWord.join('').toLowerCase())) {
-    const tempInPlace = [...thWord.filter((letter, index) => props.wordle[index] == letter), ...inPlace];
-    setInPlace(tempInPlace);
-
-    const tempExists = [...thWord.filter((letter) => props.wordle.includes(letter) && !inPlace.includes(letter)), ...exists];
-    setExists(tempExists);
-
-    const tempNotExists = [...thWord.filter((letter) => !props.wordle.includes(letter)), ...notExists];
-    setNotExists(tempNotExists);
-
-    setCurrentLine(currentLine + 1);
-  } else {
-    alert('This word is not in the dictionary!');
-  }
-  if (currentLine == 6) {
-    alert('You lose!');
-  }
-}
-
-export default function Wordle(props: any) {
-
+export default function Wordle({ wordle, onPlayAgain }: WordleProps) {
   const [currentLine, setCurrentLine] = useState(1);
-
+  const [gameState, setGameState] = useState<'playing' | 'won' | 'lost'>('playing');
+  
   const [firstWord, setFirstWord] = useState(['', '', '', '', '']);
   const [secondWord, setSecondWord] = useState(['', '', '', '', '']);
   const [thirdWord, setThirdWord] = useState(['', '', '', '', '']);
@@ -62,94 +23,274 @@ export default function Wordle(props: any) {
   const [fifthWord, setFifthWord] = useState(['', '', '', '', '']);
   const [sixthWord, setSixthWord] = useState(['', '', '', '', '']);
 
-  const [inPlace, setInPlace] = useState(['']);
-  const [exists, setExists] = useState(['']);
-  const [notExists, setNotExists] = useState(['']);
+  const [inPlace, setInPlace] = useState<string[]>([]);
+  const [exists, setExists] = useState<string[]>([]);
+  const [notExists, setNotExists] = useState<string[]>([]);
+  
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
+  const [shake, setShake] = useState(false);
+  const [animatingLine, setAnimatingLine] = useState<number | null>(null);
 
-  const clickKeys = (letter: string) => {
-    if (currentLine == 1) {
-      setFirstWord(firstWord.map((l, i) => i == firstWord.indexOf('') ? letter : l));
-    }
-    if (currentLine == 2) {
-      setSecondWord(secondWord.map((l, i) => i == secondWord.indexOf('') ? letter : l));
-    }
-    if (currentLine == 3) {
-      setThirdWord(thirdWord.map((l, i) => i == thirdWord.indexOf('') ? letter : l));
-    }
-    if (currentLine == 4) {
-      setForthWord(forthWord.map((l, i) => i == forthWord.indexOf('') ? letter : l));
-    }
-    if (currentLine == 5) {
-      setFifthWord(fifthWord.map((l, i) => i == fifthWord.indexOf('') ? letter : l));
-    }
-    if (currentLine == 6) {
-      setSixthWord(sixthWord.map((l, i) => i == sixthWord.indexOf('') ? letter : l));
-    }
-  }
+  const resetGame = () => {
+    // Reset all state
+    setCurrentLine(1);
+    setGameState('playing');
+    setFirstWord(['', '', '', '', '']);
+    setSecondWord(['', '', '', '', '']);
+    setThirdWord(['', '', '', '', '']);
+    setForthWord(['', '', '', '', '']);
+    setFifthWord(['', '', '', '', '']);
+    setSixthWord(['', '', '', '', '']);
+    setInPlace([]);
+    setExists([]);
+    setNotExists([]);
+    setToast(null);
+    setShake(false);
+    setAnimatingLine(null);
+    
+    // Generate new word
+    onPlayAgain();
+  };
 
-  const clickEnter = () => {
-    if (currentLine == 6 && sixthWord.length == 5 && sixthWord.every((letter) => letter != '')) {
-      enterMethod(sixthWord, inPlace, exists, notExists, currentLine, setInPlace, setExists, setNotExists, setCurrentLine, props);
-    }
-    if (currentLine == 5 && fifthWord.length == 5 && fifthWord.every((letter) => letter != '')) {
-      enterMethod(fifthWord, inPlace, exists, notExists, currentLine, setInPlace, setExists, setNotExists, setCurrentLine, props);
-    }
-    if (currentLine == 4 && forthWord.length == 5 && forthWord.every((letter) => letter != '')) {
-      enterMethod(forthWord, inPlace, exists, notExists, currentLine, setInPlace, setExists, setNotExists, setCurrentLine, props);
-    }
-    if (currentLine == 3 && thirdWord.length == 5 && thirdWord.every((letter) => letter != '')) {
-      enterMethod(thirdWord, inPlace, exists, notExists, currentLine, setInPlace, setExists, setNotExists, setCurrentLine, props);
-    }
-    if (currentLine == 2 && secondWord.length == 5 && secondWord.every((letter) => letter != '')) {
-      enterMethod(secondWord, inPlace, exists, notExists, currentLine, setInPlace, setExists, setNotExists, setCurrentLine, props);
-    }
-    if (currentLine == 1 && firstWord.length == 5 && firstWord.every((letter) => letter != '')) {
-      enterMethod(firstWord, inPlace, exists, notExists, currentLine, setInPlace, setExists, setNotExists, setCurrentLine, props);
-    }
-  }
+  const showToast = (message: string, type: 'success' | 'error' | 'info' = 'info') => {
+    setToast({ message, type });
+  };
 
-  const clickClear = () => {
-    if (currentLine == 1) {
-      clearMethod(firstWord, setFirstWord);
+  const clickKeys = useCallback((letter: string) => {
+    if (gameState !== 'playing') return;
+    
+    let currentWord: string[] = [];
+    let setWord: (word: string[]) => void = () => {};
+
+    switch (currentLine) {
+      case 1:
+        currentWord = firstWord;
+        setWord = setFirstWord;
+        break;
+      case 2:
+        currentWord = secondWord;
+        setWord = setSecondWord;
+        break;
+      case 3:
+        currentWord = thirdWord;
+        setWord = setThirdWord;
+        break;
+      case 4:
+        currentWord = forthWord;
+        setWord = setForthWord;
+        break;
+      case 5:
+        currentWord = fifthWord;
+        setWord = setFifthWord;
+        break;
+      case 6:
+        currentWord = sixthWord;
+        setWord = setSixthWord;
+        break;
     }
-    if (currentLine == 2) {
-      clearMethod(secondWord, setSecondWord);
+    
+    const emptyIndex = currentWord.indexOf('');
+    
+    if (emptyIndex !== -1) {
+      const newWord = [...currentWord];
+      newWord[emptyIndex] = letter;
+      setWord(newWord);
     }
-    if (currentLine == 3) {
-      clearMethod(thirdWord, setThirdWord);
+  }, [currentLine, gameState, firstWord, secondWord, thirdWord, forthWord, fifthWord, sixthWord]);
+
+  const clickClear = useCallback(() => {
+    if (gameState !== 'playing') return;
+    
+    let currentWord: string[] = [];
+    let setWord: (word: string[]) => void = () => {};
+
+    switch (currentLine) {
+      case 1:
+        currentWord = firstWord;
+        setWord = setFirstWord;
+        break;
+      case 2:
+        currentWord = secondWord;
+        setWord = setSecondWord;
+        break;
+      case 3:
+        currentWord = thirdWord;
+        setWord = setThirdWord;
+        break;
+      case 4:
+        currentWord = forthWord;
+        setWord = setForthWord;
+        break;
+      case 5:
+        currentWord = fifthWord;
+        setWord = setFifthWord;
+        break;
+      case 6:
+        currentWord = sixthWord;
+        setWord = setSixthWord;
+        break;
     }
-    if (currentLine == 4) {
-      clearMethod(forthWord, setForthWord);
+    
+    const newWord = [...currentWord];
+    
+    for (let i = newWord.length - 1; i >= 0; i--) {
+      if (newWord[i] !== '') {
+        newWord[i] = '';
+        break;
+      }
     }
-    if (currentLine == 5) {
-      clearMethod(fifthWord, setFifthWord);
+    
+    setWord(newWord);
+  }, [currentLine, gameState, firstWord, secondWord, thirdWord, forthWord, fifthWord, sixthWord]);
+
+  const clickEnter = useCallback(() => {
+    if (gameState !== 'playing') return;
+    
+    let currentWord: string[] = [];
+
+    switch (currentLine) {
+      case 1:
+        currentWord = firstWord;
+        break;
+      case 2:
+        currentWord = secondWord;
+        break;
+      case 3:
+        currentWord = thirdWord;
+        break;
+      case 4:
+        currentWord = forthWord;
+        break;
+      case 5:
+        currentWord = fifthWord;
+        break;
+      case 6:
+        currentWord = sixthWord;
+        break;
     }
-    if (currentLine == 6) {
-      clearMethod(sixthWord, setSixthWord);
+    
+    // Check if word is complete
+    if (currentWord.some(letter => letter === '')) {
+      showToast('Not enough letters', 'error');
+      setShake(true);
+      setTimeout(() => setShake(false), 500);
+      return;
     }
-  }
+
+    const wordString = currentWord.join('').toLowerCase();
+    
+    // Check if word is in dictionary
+    if (!words.includes(wordString)) {
+      showToast('Not in word list', 'error');
+      setShake(true);
+      setTimeout(() => setShake(false), 500);
+      return;
+    }
+
+    // Animate the tiles flipping
+    setAnimatingLine(currentLine);
+    
+    setTimeout(() => {
+      setAnimatingLine(null);
+      
+      // Update letter states
+      const newInPlace = currentWord
+        .filter((letter, index) => wordle[index] === letter)
+        .concat(inPlace);
+      setInPlace(newInPlace);
+
+      const newExists = currentWord
+        .filter((letter) => wordle.includes(letter) && !newInPlace.includes(letter))
+        .concat(exists);
+      setExists(newExists);
+
+      const newNotExists = currentWord
+        .filter((letter) => !wordle.includes(letter))
+        .concat(notExists);
+      setNotExists(newNotExists);
+
+      // Check win condition
+      if (currentWord.join('') === wordle) {
+        setGameState('won');
+        return;
+      }
+
+      // Check lose condition
+      if (currentLine === 6) {
+        setGameState('lost');
+        return;
+      }
+
+      // Move to next line
+      setCurrentLine(currentLine + 1);
+    }, 600);
+  }, [currentLine, gameState, wordle, inPlace, exists, notExists, firstWord, secondWord, thirdWord, forthWord, fifthWord, sixthWord]);
+
+  // Keyboard event listener
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (gameState !== 'playing') return;
+
+      if (e.key === 'Enter') {
+        clickEnter();
+      } else if (e.key === 'Backspace') {
+        clickClear();
+      } else if (/^[a-zA-Z]$/.test(e.key)) {
+        clickKeys(e.key.toUpperCase());
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [clickKeys, clickClear, clickEnter, gameState]);
 
   return (
-    <div>
-      <ShowWords
-        wordle={props.wordle.split('')}
-        currentLine={currentLine}
-        firstWord={firstWord}
-        secondWord={secondWord}
-        thirdWord={thirdWord}
-        forthWord={forthWord}
-        fifthWord={fifthWord}
-        sixthWord={sixthWord}
-      />
-      <div className="my-16" />
-      <Keyboard
-        inPlace={inPlace}
-        exists={exists}
-        notExists={notExists}
-        clickKeys={clickKeys}
-        clickEnter={clickEnter}
-        clickClear={clickClear}
-      />
+    <div className="flex flex-col items-center justify-between min-h-[calc(100vh-64px)] py-8">
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
+
+      {gameState !== 'playing' && (
+        <GameOverModal
+          isWin={gameState === 'won'}
+          word={wordle}
+          attempts={currentLine}
+          onPlayAgain={resetGame}
+        />
+      )}
+
+      <div className="flex-1 flex items-center">
+        <ShowWords
+          wordle={wordle.split('')}
+          currentLine={currentLine}
+          firstWord={firstWord}
+          secondWord={secondWord}
+          thirdWord={thirdWord}
+          forthWord={forthWord}
+          fifthWord={fifthWord}
+          sixthWord={sixthWord}
+          inPlace={inPlace}
+          exists={exists}
+          notExists={notExists}
+          shake={shake}
+          animatingLine={animatingLine}
+        />
+      </div>
+
+      <div className="w-full max-w-lg px-2">
+        <Keyboard
+          inPlace={inPlace}
+          exists={exists}
+          notExists={notExists}
+          clickKeys={clickKeys}
+          clickEnter={clickEnter}
+          clickClear={clickClear}
+        />
+      </div>
     </div>
   );
 }
